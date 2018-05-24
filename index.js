@@ -30,7 +30,7 @@ const LaunchRequestHandler = {
     return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
   },
   handle(handlerInput) {
-    const speechText = 'This is Puppy, you can say turn on or turn off the fan!';
+    const speechText = 'This is Megatron, you can say turn on or turn off the fan!';
 
     return handlerInput.responseBuilder
       .speak(speechText)
