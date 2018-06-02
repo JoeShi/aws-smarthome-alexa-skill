@@ -7,6 +7,7 @@ const AWS = require('aws-sdk');
 // Code for the handlers here
 
 let skill;
+const ThingName = 'air-purifier-1';
 
 exports.handler = async function (event, context) {
   console.log(`REQUEST++++${JSON.stringify(event)}`);
@@ -54,7 +55,7 @@ const FanIntentHandler = {
       if (status === 'on') {
         return new Promise(resolve => {
           iotData.updateThingShadow({
-            thingName: 'home_Core',
+            thingName: ThingName,
             payload: JSON.stringify({
               state: {
                 desired: {
@@ -70,7 +71,7 @@ const FanIntentHandler = {
       } else if (status === 'off') {
         return new Promise(resolve => {
           iotData.updateThingShadow({
-            thingName: 'home_Core',
+            thingName: ThingName,
             payload: JSON.stringify({
               state: {
                 desired: {
