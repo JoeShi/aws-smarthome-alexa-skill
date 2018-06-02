@@ -15,7 +15,7 @@ exports.handler = async function (event, context) {
     skill = Alexa.SkillBuilders.custom()
       .addRequestHandlers(
         LaunchRequestHandler,
-        FanIntentHandler,
+        AirPurifierIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler,
@@ -31,20 +31,20 @@ const LaunchRequestHandler = {
     return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
   },
   handle(handlerInput) {
-    const speechText = 'This is Megatron, you can say turn on or turn off the fan!';
+    const speechText = 'This is Puppy, you can say turn on or turn off the air purifier!';
 
     return handlerInput.responseBuilder
       .speak(speechText)
       .reprompt(speechText)
-      .withSimpleCard('The fan', speechText)
+      .withSimpleCard('The air purifier', speechText)
       .getResponse();
   }
 };
 
-const FanIntentHandler = {
+const AirPurifierIntentHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'Fan';
+      && handlerInput.requestEnvelope.request.intent.name === 'AirPurifier';
   },
   handle(handlerInput) {
     if ( handlerInput.requestEnvelope.request.intent.slots && handlerInput.requestEnvelope.request.intent.slots.status) {
@@ -64,7 +64,7 @@ const FanIntentHandler = {
               }
             })
           }).promise().then(() => {
-            const speechText = 'turning on the fan.'
+            const speechText = 'turning on the air purifier.'
             resolve(handlerInput.responseBuilder.speak(speechText).getResponse())
           })
         })
@@ -80,16 +80,16 @@ const FanIntentHandler = {
               }
             })
           }).promise().then(() => {
-            const speechText = 'turning off the fan.'
+            const speechText = 'turning off the air purifier.'
             resolve(handlerInput.responseBuilder.speak(speechText).getResponse())
           })
         })
       }
     } else {
-      const speechText = 'Unsupported command, please say turn on or turn off the fan.'
+      const speechText = 'Unsupported command, please say turn on or turn off the air purifier.'
       return handlerInput.responseBuilder
         .speak(speechText)
-        .withSimpleCard('fan on or off', speechText)
+        .withSimpleCard('air purifier on or off', speechText)
         .getResponse();
     }
   }
@@ -101,12 +101,12 @@ const HelpIntentHandler = {
       && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent';
   },
   handle(handlerInput) {
-    const speechText = 'You can say turn on or turn off the fan!';
+    const speechText = 'You can say turn on or turn off the air purifier!';
 
     return handlerInput.responseBuilder
       .speak(speechText)
       .reprompt(speechText)
-      .withSimpleCard('Turn on or turn off the fan', speechText)
+      .withSimpleCard('Turn on or turn off the air purifier', speechText)
       .getResponse();
   }
 };

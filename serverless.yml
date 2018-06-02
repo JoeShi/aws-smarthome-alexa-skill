@@ -54,7 +54,7 @@ package:
     - node_modules/aws-sdk
 
 functions:
-  toggleFan:
+  toggleAirPurifier:
     handler: index.handler
     events:
       - alexaSkill:
