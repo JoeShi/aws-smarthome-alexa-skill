@@ -31,12 +31,12 @@ const LaunchRequestHandler = {
     return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
   },
   handle(handlerInput) {
-    const speechText = 'This is Puppy, you can say turn on or turn off the air purifier!';
+    const speechText = 'This is Bob, you can say turn on or turn off the fan!';
 
     return handlerInput.responseBuilder
       .speak(speechText)
       .reprompt(speechText)
-      .withSimpleCard('The air purifier', speechText)
+      .withSimpleCard('The fan', speechText)
       .getResponse();
   }
 };
@@ -64,7 +64,7 @@ const AirPurifierIntentHandler = {
               }
             })
           }).promise().then(() => {
-            const speechText = 'turning on the air purifier.'
+            const speechText = 'turning on the fan.'
             resolve(handlerInput.responseBuilder.speak(speechText).getResponse())
           })
         })
@@ -80,16 +80,16 @@ const AirPurifierIntentHandler = {
               }
             })
           }).promise().then(() => {
-            const speechText = 'turning off the air purifier.'
+            const speechText = 'turning off the fan.'
             resolve(handlerInput.responseBuilder.speak(speechText).getResponse())
           })
         })
       }
     } else {
-      const speechText = 'Unsupported command, please say turn on or turn off the air purifier.'
+      const speechText = 'Unsupported command, please say turn on or turn off the fan.'
       return handlerInput.responseBuilder
         .speak(speechText)
-        .withSimpleCard('air purifier on or off', speechText)
+        .withSimpleCard('fan on or off', speechText)
         .getResponse();
     }
   }
@@ -101,12 +101,12 @@ const HelpIntentHandler = {
       && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent';
   },
   handle(handlerInput) {
-    const speechText = 'You can say turn on or turn off the air purifier!';
+    const speechText = 'You can say turn on or turn off the fan!';
 
     return handlerInput.responseBuilder
       .speak(speechText)
       .reprompt(speechText)
-      .withSimpleCard('Turn on or turn off the air purifier', speechText)
+      .withSimpleCard('Turn on or turn off the fan', speechText)
       .getResponse();
   }
 };
