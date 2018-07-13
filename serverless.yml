@@ -53,11 +53,11 @@ package:
     - node_modules/aws-sdk
 
 functions:
-  toggleAirPurifier:
+  toggleLight:
     handler: index.handler
     events:
       - alexaSkill:
-          appId: amzn1.ask.skill.5184fa42-6c79-4ee9-a6d4-d6f0dc47fc29
+          appId: amzn1.ask.skill.3a4eb0c7-b17b-4d1a-83fa-c71dbc8f7236
           enabled: true
 
 #    The following are a few example events you can configure

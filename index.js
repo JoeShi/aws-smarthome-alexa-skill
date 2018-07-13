@@ -2,12 +2,13 @@
 
 const Alexa = require('ask-sdk');
 const AWS = require('aws-sdk');
+const config = require('./config');
 // use 'ask-sdk' if standard SDK module is installed
 
 // Code for the handlers here
 
 let skill;
-const ThingName = 'air-purifier-1';
+const ThingName = 'home-1-lamp';
 
 exports.handler = async function (event, context) {
   console.log(`REQUEST++++${JSON.stringify(event)}`);
@@ -15,7 +16,7 @@ exports.handler = async function (event, context) {
     skill = Alexa.SkillBuilders.custom()
       .addRequestHandlers(
         LaunchRequestHandler,
-        AirPurifierIntentHandler,
+        LightIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler,
@@ -28,29 +29,29 @@ exports.handler = async function (event, context) {
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
-    return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
+    return handlerInput.requestEnvelope.request.type === 'Light';
   },
   handle(handlerInput) {
-    const speechText = 'This is Bob, you can say turn on or turn off the fan!';
+    const speechText = 'This is Bob, you can say turn on or turn off the light!';
 
     return handlerInput.responseBuilder
       .speak(speechText)
       .reprompt(speechText)
-      .withSimpleCard('The fan', speechText)
+      .withSimpleCard('The light', speechText)
       .getResponse();
   }
 };
 
-const AirPurifierIntentHandler = {
+const LightIntentHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'AirPurifier';
+      && handlerInput.requestEnvelope.request.intent.name === 'Light';
   },
   handle(handlerInput) {
     if ( handlerInput.requestEnvelope.request.intent.slots && handlerInput.requestEnvelope.request.intent.slots.status) {
       const status = handlerInput.requestEnvelope.request.intent.slots.status.value
       const iotData = new AWS.IotData({
-        endpoint: 'abty4kifln98q.iot.ap-northeast-1.amazonaws.com'
+        endpoint: config.iotEndpoint
       })
       if (status === 'on') {
         return new Promise(resolve => {
@@ -59,12 +60,12 @@ const AirPurifierIntentHandler = {
             payload: JSON.stringify({
               state: {
                 desired: {
-                  fan: 'on'
+                  status: 'on'
                 }
               }
             })
           }).promise().then(() => {
-            const speechText = 'turning on the fan.'
+            const speechText = 'turning on the light.'
             resolve(handlerInput.responseBuilder.speak(speechText).getResponse())
           })
         })
@@ -75,21 +76,21 @@ const AirPurifierIntentHandler = {
             payload: JSON.stringify({
               state: {
                 desired: {
-                  fan: 'off'
+                  status: 'off'
                 }
               }
             })
           }).promise().then(() => {
-            const speechText = 'turning off the fan.'
+            const speechText = 'turning off the light.'
             resolve(handlerInput.responseBuilder.speak(speechText).getResponse())
           })
         })
       }
     } else {
-      const speechText = 'Unsupported command, please say turn on or turn off the fan.'
+      const speechText = 'Unsupported command, please say turn on or turn off the light.'
       return handlerInput.responseBuilder
         .speak(speechText)
-        .withSimpleCard('fan on or off', speechText)
+        .withSimpleCard('light on or off', speechText)
         .getResponse();
     }
   }
@@ -101,12 +102,12 @@ const HelpIntentHandler = {
       && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent';
   },
   handle(handlerInput) {
-    const speechText = 'You can say turn on or turn off the fan!';
+    const speechText = 'You can say turn on or turn off the light!';
 
     return handlerInput.responseBuilder
       .speak(speechText)
       .reprompt(speechText)
-      .withSimpleCard('Turn on or turn off the fan', speechText)
+      .withSimpleCard('Turn on or turn off the light', speechText)
       .getResponse();
   }
 };
