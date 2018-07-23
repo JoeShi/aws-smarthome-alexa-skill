@@ -3,12 +3,13 @@
 const Alexa = require('ask-sdk');
 const AWS = require('aws-sdk');
 const config = require('./config');
-// use 'ask-sdk' if standard SDK module is installed
 
-// Code for the handlers here
+AWS.config.update({
+  region: 'us-west-2'
+})
 
 let skill;
-const ThingName = 'home-1-lamp';
+let thingName;
 
 exports.handler = async function (event, context) {
   console.log(`REQUEST++++${JSON.stringify(event)}`);
@@ -29,11 +30,10 @@ exports.handler = async function (event, context) {
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
-    return handlerInput.requestEnvelope.request.type === 'Light';
+    return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
   },
   handle(handlerInput) {
     const speechText = 'This is Bob, you can say turn on or turn off the light!';
-
     return handlerInput.responseBuilder
       .speak(speechText)
       .reprompt(speechText)
@@ -48,6 +48,26 @@ const LightIntentHandler = {
       && handlerInput.requestEnvelope.request.intent.name === 'Light';
   },
   handle(handlerInput) {
+    console.log('haha:' + handlerInput.session)
+    console.log('hehe:' + handlerInput.requestEnvelope.session)
+
+    const ddb = new AWS.DynamoDB.DocumentClient()
+    const params = {
+      TableName: config.dynamoDB.tablePrefix + 'Things',
+      ExpressionAttributeValues: {
+        ":userId": "us-west-2:dc5dc6d6-ead3-4605-b64d-96efd07d40da",
+        ":alexaType": "Skill"
+      },
+      KeyConditionExpression: "userId = :userId",
+      FilterExpression: "alexaType = :alexaType"
+    }
+
+    ddb.query(params, function (err, data) {
+      if (err) { console.error(err); return }
+      console.log(data.Items[0].thingName)
+      thingName = data.Items[0].thingName
+    })
+
     if ( handlerInput.requestEnvelope.request.intent.slots && handlerInput.requestEnvelope.request.intent.slots.status) {
       const status = handlerInput.requestEnvelope.request.intent.slots.status.value
       const iotData = new AWS.IotData({

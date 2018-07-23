@@ -21,8 +21,10 @@ provider:
   name: aws
   runtime: nodejs8.10
   stage: dev
+  region: us-west-2
   iamManagedPolicies:
     - 'arn:aws:iam::aws:policy/AWSIoTFullAccess'
+    - 'arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess'
 
 # you can add statements to the Lambda function's IAM Role here
 #  iamRoleStatements:

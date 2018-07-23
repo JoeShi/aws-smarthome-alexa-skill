@@ -1,3 +1,6 @@
 {
-  "iotEndpoint": "xxxxxxx.iot.aws_region.amazonaws.com"
+  "iotEndpoint": "xxxxxxx.iot.aws_region.amazonaws.com",
+  "dynamoDB": {
+    "tablePrefix": "smarthome-mobilehub-1975105605-"
+  }
 }
